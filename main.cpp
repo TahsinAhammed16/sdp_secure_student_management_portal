@@ -5,6 +5,7 @@ using namespace std;
 
 // Forward Declarations
 void registration();
+void login();
 
 int main()
 {
@@ -36,6 +37,7 @@ int main()
         {
         case 1:
             system("cls");
+            login();
             break;
         case 2:
             system("cls");
@@ -89,4 +91,46 @@ void registration()
     cout << "|******************************************************************|\n";
     cout << "|                  Registration is successful!                     |\n";
     cout << "|******************************************************************|\n\n\n";
+}
+
+void login()
+{
+    int count;
+    string userId, userPassword, id, pass;
+    cout << "__________________________________________________________________\n";
+    cout << "|                           Login Page                            |\n";
+    cout << "|_________________________________________________________________|\n\n";
+
+    cout << "\t\t Enter your username: ";
+    cin >> userId;
+    cout << "\t\t Enter your password: ";
+    cin >> userPassword;
+
+    // Open the file where credentials are stored
+    ifstream read("credentials.txt");
+    // Check the file for matching username and password
+    while (read >> id >> pass)
+    {
+        if (id == userId && pass == userPassword)
+        {
+            count = 1; // Successful login
+            break;
+        }
+    }
+    read.close();
+    system("cls");
+
+    // Output result based on the success or failure of the login attempt
+    if (count == 1)
+    {
+        cout << "|******************************************************************|\n";
+        cout << "                Login successful! Welcome " << userId << ".        \n";
+        cout << "|******************************************************************|\n\n";
+    }
+    else
+    {
+        cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+        cout << "!          Login failed! Invalid username or password.             !\n";
+        cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
+    }
 }
