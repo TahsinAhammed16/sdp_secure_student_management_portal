@@ -3,6 +3,9 @@
 #include <string>
 using namespace std;
 
+// Forward Declarations
+void registration();
+
 int main()
 {
     // Infinite loop to continuously display the menu until the user exits
@@ -27,7 +30,6 @@ int main()
         int choice;
         cout << "Please enter your choice: ";
         cin >> choice;
-        // cout << endl;
 
         // Handle the menu choice
         switch (choice)
@@ -37,12 +39,14 @@ int main()
             break;
         case 2:
             system("cls");
+            registration();
             break;
         case 3:
             system("cls");
             break;
         case 4:
             system("cls");
+            cout << endl;
             cout << "|******************************************************************|\n";
             cout << "|          Thank you for using the system. Exiting...!             |\n";
             cout << "|******************************************************************|\n\n";
@@ -55,4 +59,34 @@ int main()
         }
     }
     return 0;
+}
+
+void registration()
+{
+    string userId, userPassword, userEmail, securityQuestion, securityAnswer;
+    cout << "__________________________________________________________________\n";
+    cout << "|                       Registration Page                         |\n";
+    cout << "|_________________________________________________________________|\n\n";
+
+    cout << "\t\t Enter your username: ";
+    cin >> userId;
+    cout << "\t\t Enter your password: ";
+    cin >> userPassword;
+    cout << "\t\t Enter your email: ";
+    cin >> userEmail;
+    cout << "\t\t Enter a security question (e.g., Your pet's name?): ";
+    cin.ignore();                   // Clear the input buffer
+    getline(cin, securityQuestion); // Use getline to take the full input, including spaces
+    cout << "\t\t Enter the answer to your security question: ";
+    getline(cin, securityAnswer);
+
+    ofstream write("credentials.txt", ios::app);
+    write << userId << ' ' << userPassword << ' ' << userEmail << ' ' << securityQuestion << ' ' << securityAnswer << endl;
+    write.close();
+    system("cls");
+
+    cout << endl;
+    cout << "|******************************************************************|\n";
+    cout << "|                  Registration is successful!                     |\n";
+    cout << "|******************************************************************|\n\n\n";
 }
