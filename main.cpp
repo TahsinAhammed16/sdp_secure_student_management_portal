@@ -8,6 +8,7 @@ using namespace std;
 // Forward Declarations
 void registration();
 void login();
+void forgotPassword(); // Declaration for forgot password function
 void manageStudents();
 
 class Students
@@ -344,6 +345,7 @@ int main()
             break;
         case 3:
             system("cls");
+            forgotPassword();
             break;
         case 4:
             system("cls");
@@ -435,6 +437,79 @@ void login()
         cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
     }
 }
+
+
+void forgotPassword() {
+    string userId, securityQuestion, securityAnswer, newPassword;
+    cout << "__________________________________________________________________\n";
+    cout << "|                      Forgot Password Page                       |\n";
+    cout << "|_________________________________________________________________|\n\n";
+
+    cout << "\t\t Enter your username: ";
+    cin >> userId;
+
+    // Open the file where credentials are stored
+    ifstream read("credentials.txt");
+    bool userFound = false;
+
+    // Check for matching username and retrieve the security question
+    while (read >> userId >> newPassword >> securityQuestion >> securityAnswer) {
+        if (userId == userId) {
+            userFound = true;
+            cout << "\t\t Security Question: " << securityQuestion << endl;
+            break;
+        }
+    }
+    read.close();
+
+    if (!userFound) {
+        cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+        cout << "!              User not found! Please check your username.        !\n";
+        cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
+        return;
+    }
+
+    cout << "\t\t Enter the answer to your security question: ";
+    cin.ignore(); // Clear the input buffer
+    getline(cin, securityAnswer); // Use getline to capture the full input
+
+    // Validate the security answer
+    if (securityAnswer == securityAnswer) {
+        cout << "\t\t Enter your new password: ";
+        getline(cin, newPassword);
+
+        // Update the password in the credentials file
+        // Read all data to a temporary string
+        ifstream tempRead("credentials.txt");
+        ofstream tempWrite("temp_credentials.txt");
+
+        while (tempRead >> userId >> newPassword >> securityQuestion >> securityAnswer) {
+            if (userId == userId) {
+                // Write updated user data
+                tempWrite << userId << ' ' << newPassword << ' ' << securityQuestion << ' ' << securityAnswer << endl;
+            } else {
+                // Write unchanged user data
+                tempWrite << userId << ' ' << newPassword << ' ' << securityQuestion << ' ' << securityAnswer << endl;
+            }
+        }
+
+        tempRead.close();
+        tempWrite.close();
+
+        // Replace the original file with the updated file
+        remove("credentials.txt");
+        rename("temp_credentials.txt", "credentials.txt");
+
+        cout << "|******************************************************************|\n";
+        cout << "|                     Password successfully updated!                |\n";
+        cout << "|******************************************************************|\n\n";
+    } else {
+        cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+        cout << "!                  Incorrect answer to the security question!      !\n";
+        cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
+    }
+}
+
 
 void manageStudents()
 {
