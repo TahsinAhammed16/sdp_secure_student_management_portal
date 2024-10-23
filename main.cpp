@@ -8,6 +8,7 @@ using namespace std;
 void registration();
 void forgotPassword();
 void login();
+void manageStudents();
 
 int main()
 {
@@ -226,14 +227,77 @@ void login()
     credentialRead.close();
     if (loginSuccessful)
     {
+        system("cls");
         cout << "\n|******************************************************************|\n";
         cout << "|                           Login Successful!                      |\n";
         cout << "|******************************************************************|\n\n";
+
+        // Call manageStudents function after successful login
+        manageStudents();
     }
     else
     {
         cout << "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
         cout << "!          Login failed! Invalid username or password.             !\n";
         cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
+    }
+}
+
+void manageStudents()
+{
+    int choice;
+    while (true)
+    {
+        cout << "__________________________________________________________________\n";
+        cout << "|                     Student Management System                   |\n";
+        cout << "|_________________________________________________________________|\n\n";
+        cout << "\t|--------------------------------------------------|\n";
+        cout << "\t|  1. Register New Student                         |\n";
+        cout << "\t|--------------------------------------------------|\n";
+        cout << "\t|  2. Check Individual Student Result              |\n";
+        cout << "\t|--------------------------------------------------|\n";
+        cout << "\t|  3. Display All Student Records                  |\n";
+        cout << "\t|--------------------------------------------------|\n";
+        cout << "\t|  4. Modify Student Details                       |\n";
+        cout << "\t|--------------------------------------------------|\n";
+        cout << "\t|  5. Delete Student Record                        |\n";
+        cout << "\t|--------------------------------------------------|\n";
+        cout << "\t|  6. Logout                                       |\n";
+        cout << "\t|--------------------------------------------------|\n";
+        cout << "\nPlease enter your choice: ";
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            system("cls");
+            // registerStudent();
+            break;
+        case 2:
+            system("cls");
+            // individualResult();
+            break;
+        case 3:
+            system("cls");
+            // displayAllStudent();
+            break;
+        case 4:
+            system("cls");
+            // modifyStudent();
+            break;
+        case 5:
+            system("cls");
+            // deleteStudent();
+            break;
+        case 6:
+            system("cls");
+            cout << "|******************************************************************|\n";
+            cout << "|                          Logging out.                            |\n";
+            cout << "|******************************************************************|\n\n";
+            return; // Return to the main menu
+        default:
+            cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+            cout << "!               Invalid choice. Please try again.                  !\n";
+            cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
+        }
     }
 }
