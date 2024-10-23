@@ -7,6 +7,7 @@ using namespace std;
 // Forward Declarations
 void registration();
 void forgotPassword();
+void login();
 
 int main()
 {
@@ -35,7 +36,7 @@ int main()
         {
         case 1:
             system("cls");
-            // login();
+            login();
             break;
         case 2:
             system("cls");
@@ -191,6 +192,48 @@ void forgotPassword()
     {
         cout << "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
         cout << "!                  Incorrect answer or email!                      !\n";
+        cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
+    }
+}
+
+void login()
+{
+    string inputUserId, inputUserPassword;
+    string userId, userPassword;
+    cout << "__________________________________________________________________\n";
+    cout << "|                           Login Page                            |\n";
+    cout << "|_________________________________________________________________|\n\n";
+    cout << "Enter your username: ";
+    cin.ignore(); // Clear the input buffer before the first getline
+    getline(cin, inputUserId);
+    cout << "Enter your password: ";
+    getline(cin, inputUserPassword);
+    ifstream credentialRead("credentials.txt");
+    bool loginSuccessful = false;
+    string line;
+    // Check for matching username and password
+    while (getline(credentialRead, line))
+    {
+        stringstream ss(line); // String stream for reading the line
+        getline(ss, userId, '|');
+        getline(ss, userPassword, '|');
+        if (userId == inputUserId && userPassword == inputUserPassword)
+        {
+            loginSuccessful = true;
+            break; // User found and password matches
+        }
+    }
+    credentialRead.close();
+    if (loginSuccessful)
+    {
+        cout << "\n|******************************************************************|\n";
+        cout << "|                           Login Successful!                      |\n";
+        cout << "|******************************************************************|\n\n";
+    }
+    else
+    {
+        cout << "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+        cout << "!          Login failed! Invalid username or password.             !\n";
         cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
     }
 }
