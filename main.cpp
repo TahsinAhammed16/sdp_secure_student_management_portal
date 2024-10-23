@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <sstream> // For stringstream
+#include <iomanip> // For formatting decimal points
 using namespace std;
 
 // Forward Declarations
@@ -226,6 +227,61 @@ public:
         {
             cout << "Student ID not found.\n";
         }
+        readStudents.close(); // Close the file
+    }
+
+    // Function to display all student result
+    void displayAllStudent()
+    {
+        ifstream readStudents("students.txt");
+        if (!readStudents)
+        {
+            cout << "Error: Unable to open the file!\n";
+            return;
+        }
+        cout << "______________________________________________________________________\n";
+        cout << "|                      All Student Records                            |\n";
+        cout << "|---------------------------------------------------------------------|\n";
+        cout << "| Name                   | ID           | Semesters Completed  | CGPA |\n";
+        cout << "|------------------------|--------------|----------------------|------|\n";
+        string line;
+        while (getline(readStudents, line)) // Read the entire line
+        {
+            if (line != "") // Check if the line is not empty
+            {
+                stringstream ss(line); // Create a stringstream
+                string name, id;
+                int completedSemesters;
+                float sGPA[8];
+                getline(ss, name, '|');   // Read name
+                getline(ss, id, '|');     // Read ID
+                ss >> completedSemesters; // Read completed semesters
+                ss.ignore();              // Ignore the delimiter after semesters
+                float totalSGPA = 0;
+                for (int i = 0; i < completedSemesters; i++)
+                {
+                    ss >> sGPA[i];
+                    ss.ignore();                     // Ignore delimiter after each SGPA value
+                    totalSGPA = totalSGPA + sGPA[i]; // Add SGPA for CGPA calculation
+                }
+                float CGPA;
+                if (completedSemesters > 0)
+                {
+                    CGPA = totalSGPA / completedSemesters; // Calculate CGPA when there are completed semesters
+                }
+                else
+                {
+                    CGPA = 0.0; // Set CGPA to 0 if no semesters are completed
+                }
+                // Display the student's information with formatted output
+                cout << "| " << setw(23) << left << name               // Align name to the left with a width of 22
+                     << "| " << setw(13) << left << id                 // Align ID to the left with a width of 12
+                     << "| " << setw(21) << left << completedSemesters // Align completed semesters
+                     << "| " << fixed << setprecision(2) << CGPA       // Fixed precision for CGPA
+                     << " |\n";                                        // Display CGPA
+            }
+        }
+        cout << "|---------------------------------------------------------------------|\n";
         readStudents.close(); // Close the file
     }
 };
@@ -499,7 +555,7 @@ void manageStudents()
             break;
         case 3:
             system("cls");
-            // student.displayAllStudent();
+            student.displayAllStudent();
             break;
         case 4:
             system("cls");
