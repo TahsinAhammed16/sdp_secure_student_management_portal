@@ -10,6 +10,141 @@ void forgotPassword();
 void login();
 void manageStudents();
 
+class Students
+{
+public:
+    string name, id;
+    int completedSemesters;
+    float sGPA[8];
+    // Function to calculate SGPA for the current semester
+    float calculateSGPA(float totalCredits, float totalGradePoints)
+    {
+        if (totalCredits == 0)
+            return 0; // Prevent division by zero
+        return totalGradePoints / totalCredits;
+    }
+    // Function to calculate CGPA
+    float calculateCGPA(float sGPA[], int completedSemesters)
+    {
+        float totalSGPA = 0.0;
+        for (int i = 0; i < completedSemesters; i++)
+        {
+            totalSGPA = totalSGPA + sGPA[i];
+        }
+        if (completedSemesters > 0)
+        {
+            return totalSGPA / completedSemesters;
+        }
+        else
+        {
+            return 0.0; // Return 0 if no semesters completed
+        }
+    }
+    // Function to convert marks to grade point
+    float getGradePoint(float marks)
+    {
+        if (marks >= 80.0)
+            return 4.00;
+        else if (marks >= 75.0)
+            return 3.75;
+        else if (marks >= 70.0)
+            return 3.50;
+        else if (marks >= 65.0)
+            return 3.25;
+        else if (marks >= 60.0)
+            return 3.00;
+        else if (marks >= 55.0)
+            return 2.75;
+        else if (marks >= 50.0)
+            return 2.50;
+        else if (marks >= 45.0)
+            return 2.25;
+        else if (marks >= 40.0)
+            return 2.00;
+        else
+            return 0.00;
+    }
+    // Function to register a new student
+    void registerStudent()
+    {
+        ofstream studentsWrite("students.txt", ios::app);
+        // Input student details
+        cout << "Enter student name: ";
+        cin.ignore();
+        getline(cin, name);
+        cout << "Enter student ID: ";
+        cin >> id;
+        cout << "  |\n";
+        cout << "  |How many previous semesters has the student completed? ";
+        cin >> completedSemesters;
+        // Input SGPA for each completed semester
+        for (int i = 0; i < completedSemesters; i++)
+        {
+            cout << "\t|> Enter SGPA for semester " << i + 1 << ": ";
+            cin >> sGPA[i];
+        }
+        // Check if the current semester is complete
+        char semesterComplete;
+        cout << "  |\n";
+        cout << "  |Is the current semester complete? (Y/N): ";
+        cin >> semesterComplete;
+        // Store student data in the file
+        studentsWrite << name << "|" << id << "|" << completedSemesters;
+        // Sequential Flow Operations
+        // Store SGPA for each completed semester
+        for (int i = 0; i < completedSemesters; i++)
+        {
+            studentsWrite << "|" << sGPA[i];
+        }
+        if (semesterComplete == 'Y' || semesterComplete == 'y')
+        {
+            int subjects;
+            cout << "\t|> How many subjects in the current semester? ";
+            cin >> subjects;
+            // Store number of subjects
+            studentsWrite << "|" << subjects;
+            // Loop to input subject details
+            float totalCredits = 0, totalGradePoints = 0;
+            for (int i = 0; i < subjects; i++)
+            {
+                string subjectName;
+                float credit, marks, gradePoint;
+                cout << endl;
+                cout << "\t\t---------------------------------------------------\n";
+                cout << "\t\t  >> Enter the name for subject " << i + 1 << ": ";
+                cin.ignore();
+                getline(cin, subjectName);
+                cout << "\t\t       |Enter credit for " << subjectName << ": ";
+                cin >> credit;
+                cout << "\t\t       |Enter marks for " << subjectName << "(out of 100): ";
+                cin >> marks;
+                // Function call to convert marks to grade point
+                gradePoint = getGradePoint(marks);
+                cout << "\t\t          **Grade Point for subject " << subjectName << ": " << gradePoint << endl;
+                // Write subject details to the file
+                // Use '|' as the delimiter to separate fields
+                studentsWrite << "|" << subjectName << "|" << credit << "|" << marks << "|" << gradePoint;
+                totalCredits = totalCredits + credit;
+                totalGradePoints = totalGradePoints + credit * gradePoint;
+            }
+            // sGPA is an array that stores the SGPA values for each semester
+            sGPA[completedSemesters] = calculateSGPA(totalCredits, totalGradePoints); // Calculate SGPA for the current semester
+            completedSemesters++;                                                     // Increment completed semesters
+        }
+        studentsWrite << endl;
+        studentsWrite.close();
+        // Calculate CGPA
+        float cgpa = calculateCGPA(sGPA, completedSemesters);
+        system("cls");
+        cout << endl;
+        cout << "|******************************************************************|\n";
+        cout << "|    Registration successful! Student details have been saved.     |\n";
+        cout << "     *Current Semester SGPA: " << sGPA[completedSemesters - 1] << " \n";
+        cout << "     *CGPA: " << cgpa << "                                          \n";
+        cout << "|******************************************************************|\n\n\n";
+    }
+};
+
 int main()
 {
     // Infinite loop to continuously display the menu until the user exits
@@ -246,6 +381,7 @@ void login()
 void manageStudents()
 {
     int choice;
+    Students student;
     while (true)
     {
         cout << "__________________________________________________________________\n";
@@ -270,15 +406,15 @@ void manageStudents()
         {
         case 1:
             system("cls");
-            // registerStudent();
+            student.registerStudent();
             break;
         case 2:
             system("cls");
-            // individualResult();
+            // student.individualResult();
             break;
         case 3:
             system("cls");
-            // displayAllStudent();
+            // student.displayAllStudent();
             break;
         case 4:
             system("cls");
@@ -286,7 +422,7 @@ void manageStudents()
             break;
         case 5:
             system("cls");
-            // deleteStudent();
+            // student.deleteStudent();
             break;
         case 6:
             system("cls");
