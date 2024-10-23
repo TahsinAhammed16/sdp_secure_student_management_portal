@@ -143,6 +143,91 @@ public:
         cout << "     *CGPA: " << cgpa << "                                          \n";
         cout << "|******************************************************************|\n\n\n";
     }
+
+    // Function to display individual student result
+    void individualResult()
+    {
+        ifstream readStudents("students.txt");
+        if (!readStudents)
+        {
+            cout << "Error: Unable to open the file!\n";
+            return;
+        }
+        string searchId;
+        cout << "\nEnter student ID to search: ";
+        cin >> searchId;
+        string tempName, tempId, line;
+        int tempCompletedSemesters, subjects;
+        float tempSGPA[8];
+        bool found = false;
+        // Read each line as a full student record
+        while (getline(readStudents, line))
+        {
+            // Create a string stream to parse the line
+            stringstream ss(line);
+            // Read the student data separated by '|'
+            getline(ss, tempName, '|');
+            getline(ss, tempId, '|');
+            ss >> tempCompletedSemesters;
+            ss.ignore(); // Ignore delimiter after completed semesters
+            // Read SGPA values for completed semesters
+            for (int i = 0; i < tempCompletedSemesters; i++)
+            {
+                ss >> tempSGPA[i];
+                ss.ignore(); // Ignore delimiter after each SGPA value
+            }
+            // Check if the ID matches the searched ID
+            if (tempId == searchId)
+            {
+                found = true;
+                // Display student details
+                cout << "__________________________________________________________________\n";
+                cout << "|                           Marksheet                             |\n";
+                cout << "|_________________________________________________________________|\n\n";
+                cout << "Student Name: " << tempName << endl;
+                cout << "Student ID: " << tempId << endl;
+                // Calculate CGPA using the existing function
+                float CGPA = calculateCGPA(tempSGPA, tempCompletedSemesters);
+                cout << "\nCGPA: " << CGPA << endl
+                     << endl;
+                // Display SGPA values
+                cout << "Number of Semesters Completed: " << tempCompletedSemesters << endl;
+                for (int i = 0; i < tempCompletedSemesters; i++)
+                {
+                    cout << "SGPA for Semester " << i + 1 << ": " << tempSGPA[i] << endl;
+                }
+                // Check if there are subject details for the current semester
+                if (ss >> subjects) // Read number of subjects
+                {
+                    ss.ignore(); // Ignore delimiter after subjects count
+                    cout << "\nMarksheet for Current Semester:\n";
+                    cout << "Subject\t\tCredit\tMarks\tGrade Point\n";
+                    cout << "------------------------------------------------\n";
+                    // Loop to read subject details
+                    for (int i = 0; i < subjects; i++)
+                    {
+                        string subjectName;
+                        float credit, marks, gradePoint;
+                        getline(ss, subjectName, '|'); // Read subject name
+                        ss >> credit;
+                        ss.ignore(); // Ignore delimiter after credit
+                        ss >> marks;
+                        ss.ignore();
+                        ss >> gradePoint;
+                        ss.ignore();
+                        cout << subjectName << "\t\t" << credit << "\t" << marks << "\t" << gradePoint << endl;
+                    }
+                    cout << "------------------------------------------------\n";
+                }
+                break; // Exit loop if student is found
+            }
+        }
+        if (!found)
+        {
+            cout << "Student ID not found.\n";
+        }
+        readStudents.close(); // Close the file
+    }
 };
 
 int main()
@@ -410,7 +495,7 @@ void manageStudents()
             break;
         case 2:
             system("cls");
-            // student.individualResult();
+            student.individualResult();
             break;
         case 3:
             system("cls");
