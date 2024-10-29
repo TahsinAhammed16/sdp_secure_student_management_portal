@@ -143,6 +143,12 @@ public:
         cout << "     *Current Semester SGPA: " << sGPA[completedSemesters - 1] << " \n";
         cout << "     *CGPA: " << cgpa << "                                          \n";
         cout << "|******************************************************************|\n\n\n";
+
+        // Prompt to return to main menu
+        cout << "\nPress Enter to go back to the main menu...";
+        cin.ignore(); // Ignore any leftover newline character in the input buffer
+        cin.get();    // Wait for the user to press Enter
+        system("cls");
     }
 
     // Function to display individual student result
@@ -228,6 +234,12 @@ public:
             cout << "Student ID not found.\n";
         }
         readStudents.close(); // Close the file
+
+        // Prompt to return to main menu
+        cout << "\nPress Enter to go back to the main menu...";
+        cin.ignore(); // Ignore any leftover newline character in the input buffer
+        cin.get();    // Wait for the user to press Enter
+        system("cls");
     }
 
     // Function to display all student result
@@ -283,6 +295,12 @@ public:
         }
         cout << "|---------------------------------------------------------------------|\n";
         readStudents.close(); // Close the file
+
+        // Prompt to return to main menu
+        cout << "\nPress Enter to go back to the main menu...";
+        cin.ignore(); // Ignore any leftover newline character in the input buffer
+        cin.get();    // Wait for the user to press Enter
+        system("cls");
     }
 };
 
@@ -401,6 +419,7 @@ void forgotPassword()
     credentialRead.close();
     if (!userFound)
     {
+        system("cls");
         cout << "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
         cout << "!             User not found! Please check your username.          !\n";
         cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
@@ -454,19 +473,22 @@ void forgotPassword()
             // Replace the original file with the updated file
             remove("credentials.txt");
             rename("temp_credentials.txt", "credentials.txt");
+            system("cls");
             cout << "\n|******************************************************************|\n";
             cout << "|                     Password successfully updated!               |\n";
             cout << "|******************************************************************|\n\n";
         }
         else
         {
+            system("cls");
             cout << "\n|******************************************************************|\n";
-            cout << "|                  You choose not to change your password.            |\n";
-            cout << "|********************************************************************|\n\n";
+            cout << "|               You choose not to change your password.            |\n";
+            cout << "|******************************************************************|\n\n";
         }
     }
     else
     {
+        system("cls");
         cout << "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
         cout << "!                  Incorrect answer or email!                      !\n";
         cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
@@ -513,6 +535,7 @@ void login()
     }
     else
     {
+        system("cls");
         cout << "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
         cout << "!          Login failed! Invalid username or password.             !\n";
         cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
