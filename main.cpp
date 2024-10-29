@@ -69,6 +69,14 @@ public:
     void registerStudent()
     {
         ofstream studentsWrite("students.txt", ios::app);
+
+        // Check if the file opened successfully
+        if (!studentsWrite)
+        {
+            cout << "Error opening file!" << endl;
+            return; // Exit the function if the file can't be opened
+        }
+
         // Input student details
         cout << "Enter student name: ";
         cin.ignore();
@@ -76,6 +84,7 @@ public:
         cout << "Enter student ID: ";
         cin >> id;
         cout << "  |\n";
+
         cout << "  |How many previous semesters has the student completed? ";
         cin >> completedSemesters;
         // Input SGPA for each completed semester
@@ -84,11 +93,7 @@ public:
             cout << "\t|> Enter SGPA for semester " << i + 1 << ": ";
             cin >> sGPA[i];
         }
-        // Check if the current semester is complete
-        char semesterComplete;
-        cout << "  |\n";
-        cout << "  |Is the current semester complete? (Y/N): ";
-        cin >> semesterComplete;
+
         // Store student data in the file
         studentsWrite << name << "|" << id << "|" << completedSemesters;
         // Sequential Flow Operations
@@ -97,13 +102,29 @@ public:
         {
             studentsWrite << "|" << sGPA[i];
         }
+
+        // Check if the current semester is complete
+        char semesterComplete;
+        cout << "  |\n";
+        cout << "  |Is the current semester complete? (Y/N): ";
+        cin >> semesterComplete;
+        float currentSemesterSGPA = 0; // Initialize variable for current semester SGPA
         if (semesterComplete == 'Y' || semesterComplete == 'y')
         {
             int subjects;
             cout << "\t|> How many subjects in the current semester? ";
             cin >> subjects;
+            
+            // Validate number of subjects
+            while (subjects <= 0)
+            { // Check for non-positive input
+                cout << "Invalid input. Please enter a positive number: ";
+                cin >> subjects;
+            }
+
             // Store number of subjects
             studentsWrite << "|" << subjects;
+
             // Loop to input subject details
             float totalCredits = 0, totalGradePoints = 0;
             for (int i = 0; i < subjects; i++)
@@ -119,29 +140,42 @@ public:
                 cin >> credit;
                 cout << "\t\t       |Enter marks for " << subjectName << "(out of 100): ";
                 cin >> marks;
+
                 // Function call to convert marks to grade point
                 gradePoint = getGradePoint(marks);
                 cout << "\t\t          **Grade Point for subject " << subjectName << ": " << gradePoint << endl;
+
                 // Write subject details to the file
                 // Use '|' as the delimiter to separate fields
                 studentsWrite << "|" << subjectName << "|" << credit << "|" << marks << "|" << gradePoint;
+
                 totalCredits = totalCredits + credit;
                 totalGradePoints = totalGradePoints + credit * gradePoint;
             }
             // sGPA is an array that stores the SGPA values for each semester
-            sGPA[completedSemesters] = calculateSGPA(totalCredits, totalGradePoints); // Calculate SGPA for the current semester
-            completedSemesters++;                                                     // Increment completed semesters
+            currentSemesterSGPA = calculateSGPA(totalCredits, totalGradePoints); // Calculate SGPA for the current semester
+            sGPA[completedSemesters] = currentSemesterSGPA;                      // Store in the SGPA array
+            completedSemesters++;                                                // Increment completed semesters                                                   // Increment completed semesters
         }
         studentsWrite << endl;
         studentsWrite.close();
+
         // Calculate CGPA
         float cgpa = calculateCGPA(sGPA, completedSemesters);
         system("cls");
         cout << endl;
+
         cout << "|******************************************************************|\n";
-        cout << "|    Registration successful! Student details have been saved.     |\n";
-        cout << "     *Current Semester SGPA: " << sGPA[completedSemesters - 1] << " \n";
-        cout << "     *CGPA: " << cgpa << "                                          \n";
+        cout << "    Registration successful! Student details have been saved.\n";
+        if (semesterComplete == 'Y' || semesterComplete == 'y')
+        {
+            cout << "    Current Semester SGPA: " << currentSemesterSGPA << "\n";
+        }
+        else
+        {
+            cout << "    Current Semester SGPA: Not Applicable (Semester Incomplete)\n";
+        }
+        cout << "    CGPA: " << cgpa << "\n";
         cout << "|******************************************************************|\n\n\n";
 
         // Prompt to return to main menu
